@@ -20,7 +20,7 @@ function! neomake#makers#ft#erlang#gradualizer() abort
     let maker = {
         \ 'exe': get(g:, 'neomake_erlang_gradualizer', 'gradualizer'),
         \ 'errorformat':
-            \ '%E%f: %\%%(%.%# on line %l%.%#%\)%\@=%m'
+            \ '%E%f: %\%%(%.%# line %l%.%#%\)%\@=%m'
         \ }
     function! maker.InitForJob(jobinfo) abort
         let dir = neomake#makers#ft#erlang#ProjectDir()
