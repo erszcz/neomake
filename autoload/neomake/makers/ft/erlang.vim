@@ -12,7 +12,7 @@ function! neomake#makers#ft#erlang#erlc() abort
         let dir = neomake#makers#ft#erlang#ProjectDir()
         let ebins = neomake#makers#ft#erlang#EbinDirs(dir)
         let self.args = neomake#makers#ft#erlang#ErlcArgs(dir, ebins)
-        if get(g:, 'neomake_erlang_verbose_args', 'false') ==# 'true'
+        if get(g:, 'neomake_erlang_erlc_verbose_args', 'false') ==# 'true'
             echom self.args
         endif
     endfunction
@@ -32,7 +32,7 @@ function! neomake#makers#ft#erlang#gradualizer() abort
         let dir = neomake#makers#ft#erlang#ProjectDir()
         let ebins = neomake#makers#ft#erlang#EbinDirs(dir)
         let self.args = neomake#makers#ft#erlang#GradualizerArgs(ebins)
-        if get(g:, 'neomake_erlang_verbose_args', 'false') ==# 'true'
+        if get(g:, 'neomake_erlang_gradualizer_verbose_args', 'false') ==# 'true'
             echom self.args
         endif
     endfunction
