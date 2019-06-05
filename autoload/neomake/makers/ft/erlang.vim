@@ -20,11 +20,13 @@ function! neomake#makers#ft#erlang#erlc() abort
 endfunction
 
 function! neomake#makers#ft#erlang#gradualizer() abort
+    let ef = '%E%f: %\%%(%.%# line %l%.%#%\)%\@=%m'
+    if get(g:, 'neomake_erlang_gradualizer_report_error_columns', 'false') ==# 'true'
+        let ef = '%E%f: %\%%(%.%# line %l at column %c%.%#%\)%\@=%m,' . ef
+    endif
     let maker = {
         \ 'exe': get(g:, 'neomake_erlang_gradualizer', 'gradualizer'),
-        \ 'errorformat':
-            \ '%E%f: %\%%(%.%# line %l at column %c%.%#%\)%\@=%m,' .
-            \ '%E%f: %\%%(%.%# line %l%.%#%\)%\@=%m'
+        \ 'errorformat': ef
         \ }
     function! maker.InitForJob(jobinfo) abort
         let dir = neomake#makers#ft#erlang#ProjectDir()
