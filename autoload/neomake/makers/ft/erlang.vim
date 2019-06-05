@@ -23,7 +23,7 @@ function! neomake#makers#ft#erlang#gradualizer() abort
     let maker = {
         \ 'exe': get(g:, 'neomake_erlang_gradualizer', 'gradualizer'),
         \ 'errorformat':
-            \ '%E%f: %\%%(%.%# line {%l\,%.%#}%.%#%\)%\@=%m,' .
+            \ '%E%f: %\%%(%.%# line %l at column %c%.%#%\)%\@=%m,' .
             \ '%E%f: %\%%(%.%# line %l%.%#%\)%\@=%m'
         \ }
     function! maker.InitForJob(jobinfo) abort
@@ -136,5 +136,6 @@ function! neomake#makers#ft#erlang#GradualizerArgs(ebins) abort
     for ebin in a:ebins
         let args += [ '-pa', ebin]
     endfor
+    let args += ["--"]
     return args
 endfunction
