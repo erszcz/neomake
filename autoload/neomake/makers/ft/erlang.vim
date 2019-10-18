@@ -20,6 +20,19 @@ function! neomake#makers#ft#erlang#erlc() abort
 endfunction
 
 function! neomake#makers#ft#erlang#gradualizer() abort
+    " TODO: match multiline messages, given:
+    " - the first line starts with '<FILE>: The'
+    " - the last line contains 'line <LINE>'
+    " - continuation lines begin with a single space
+    " Both of these definitions are more or less equivalent.
+    " \@= is a lookahead
+    " %\%%(SOMETHING%\) is a group
+    "let ef = '%+Z %.%# line %l %.%#,' .
+    "       \ '%E%f: %\%%(The%\)%\@=%m,' .
+    "       \ '%C %m'
+    "let ef = '%+Z %.%# line %l %.%#,' .
+    "       \ '%E%f: %\%%(The%\)%\@=%m,' .
+    "       \ '%+C %.%#'
     let ef = '%E%f: %\%%(%.%# line %l%.%#%\)%\@=%m'
     if get(g:, 'neomake_erlang_gradualizer_report_error_columns', 'false') ==# 'true'
         let ef = '%E%f: %\%%(%.%# line %l at column %c%.%#%\)%\@=%m,' . ef
