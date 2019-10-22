@@ -44,8 +44,7 @@ function! neomake#makers#ft#erlang#gradualizer() abort
     function! maker.InitForJob(jobinfo) abort
         let dir = neomake#makers#ft#erlang#ProjectDir()
         let ebins = neomake#makers#ft#erlang#EbinDirs(dir)
-        let self.args = ['--print-file']
-        let self.args += neomake#makers#ft#erlang#GradualizerArgs(ebins)
+        let self.args = neomake#makers#ft#erlang#GradualizerArgs(dir, ebins)
         if get(g:, 'neomake_erlang_gradualizer_verbose_args', 'false') ==# 'true'
             echom join(self.args, ' ')
         endif
@@ -123,13 +122,30 @@ function! neomake#makers#ft#erlang#EbinsToIncludes(ebins) abort
     for ebin in a:ebins
         if ebin =~# 'ebin$'
             let includes += [substitute(ebin, 'ebin$', 'include', '')]
-        end
+        endif
     endfor
     return includes
 endfunction
 
 function! neomake#makers#ft#erlang#ErlcArgs(root, ebins) abort
     let root = fnamemodify(a:root, ':p')
+    let target_dir = neomake#makers#ft#erlang#TargetDir(root)
+    if !isdirectory(target_dir)
+        call mkdir(target_dir, 'p')
+    endif
+    let args = neomake#makers#ft#erlang#Paths(root, a:ebins)
+    let args += ['-o', target_dir]
+    return args
+endfunction
+
+function! neomake#makers#ft#erlang#GradualizerArgs(root, ebins) abort
+    let args = ['--print-file']
+    let args += neomake#makers#ft#erlang#Paths(a:root, a:ebins)
+    let args += ["--"]
+    return args
+endfunction
+
+function! neomake#makers#ft#erlang#Paths(root, ebins) abort
     let ebins = a:ebins
     let includes = neomake#makers#ft#erlang#EbinsToIncludes(ebins)
     let args = ['-pa', 'ebin', '-I', 'include', '-I', 'src']
@@ -139,19 +155,5 @@ function! neomake#makers#ft#erlang#ErlcArgs(root, ebins) abort
     for include in includes
         let args += ['-I', include]
     endfor
-    let target_dir = neomake#makers#ft#erlang#TargetDir(root)
-    if !isdirectory(target_dir)
-        call mkdir(target_dir, 'p')
-    endif
-    let args += ['-o', target_dir]
-    return args
-endfunction
-
-function! neomake#makers#ft#erlang#GradualizerArgs(ebins) abort
-    let args = []
-    for ebin in a:ebins
-        let args += [ '-pa', ebin]
-    endfor
-    let args += ["--"]
     return args
 endfunction
