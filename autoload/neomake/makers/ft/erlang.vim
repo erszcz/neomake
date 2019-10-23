@@ -139,7 +139,7 @@ function! neomake#makers#ft#erlang#ErlcArgs(root, ebins) abort
 endfunction
 
 function! neomake#makers#ft#erlang#GradualizerArgs(root, ebins) abort
-    let args = ['--print-file']
+    let args = ['--print_file']
     let args += neomake#makers#ft#erlang#Paths(a:root, a:ebins)
     let args += ["--"]
     return args
