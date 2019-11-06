@@ -139,7 +139,12 @@ function! neomake#makers#ft#erlang#ErlcArgs(root, ebins) abort
 endfunction
 
 function! neomake#makers#ft#erlang#GradualizerArgs(root, ebins) abort
-    let args = ['--print_file']
+    let root = fnamemodify(a:root, ':p')
+    let args  = ['--print_file']
+    let specs_override_dir = get(g:, 'neomake_erlang_gradualizer_specs_override_dir', '')
+    if specs_override_dir !=# ''
+        let args += ['--specs_override_dir', specs_override_dir]
+    endif
     let args += get(g:, 'neomake_erlang_gradualizer_extra_args', [])
     let args += neomake#makers#ft#erlang#Paths(a:root, a:ebins)
     let args += ["--"]
