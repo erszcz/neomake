@@ -140,7 +140,7 @@ endfunction
 
 function! neomake#makers#ft#erlang#GradualizerArgs(root, ebins) abort
     let root = fnamemodify(a:root, ':p')
-    let args  = ['--print_file']
+    let args  = []
     let specs_override_dir = get(g:, 'neomake_erlang_gradualizer_specs_override_dir', '')
     if specs_override_dir !=# ''
         let args += ['--specs_override_dir', specs_override_dir]
